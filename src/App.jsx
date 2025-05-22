@@ -177,7 +177,7 @@ const handleSingleImageUpload = (e) => {
       newErrors.photos = "At least one property photo required";
     }
     
-     const handleSubmit = (e) => {
+    const handleSubmit = (e) => {
     e.preventDefault();
     if (!validateForm()) return;
 
@@ -383,7 +383,7 @@ const handleSingleImageUpload = (e) => {
             <div>
               <h2 className="block text-sm font-medium text-gray-700 mb-2">Super Builtup area sqft *</h2>
               <input
-                type="text"
+                type="number"
                 required
                 className="w-full p-2 border rounded-md"
                 value={formData.superBuiltupArea}
@@ -398,7 +398,7 @@ const handleSingleImageUpload = (e) => {
             <div>
               <h2 className="block text-sm font-medium text-gray-700 mb-2">Carpet Area sqft *</h2>
               <input
-                type="text"
+                type="number"
                 required
                 className="w-full p-2 border rounded-md"
                 value={formData.carpetArea}
@@ -427,7 +427,7 @@ const handleSingleImageUpload = (e) => {
             <div>
               <h2 className="block text-sm font-medium text-gray-700 mb-2">Total Floors</h2>
               <input
-                type="text"
+                type="number"
                 className="w-full p-2 border rounded-md"
                 value={formData.totalFloors}
                 onChange={(e) =>
@@ -441,7 +441,7 @@ const handleSingleImageUpload = (e) => {
             <div>
               <h2 className="block text-sm font-medium text-gray-700 mb-2">Floor No</h2>
               <input
-                type="text"
+                type="number"
                 className="w-full p-2 border rounded-md"
                 value={formData.floorNo}
                 onChange={(e) =>
@@ -693,6 +693,9 @@ const handleSingleImageUpload = (e) => {
 
             </div>
           </div>
+
+
+
           <div className="-mx-6">
             <hr className="border-t border-gray-300" />
           </div>
