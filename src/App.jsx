@@ -11,16 +11,11 @@ const PROPERTY_TYPES = [
 ];
 
 const RealEstatePostForm = () => {
-  const [photos, setPhotos] = useState(Array(20).fill(null));
-   const [selectedState, setSelectedState] = useState("");
-  const [selectedDistrict, setSelectedDistrict] = useState("");
-const [name, setName] = useState("");
-  const [logo, setLogo] = useState(null);
-  const [mobile, setMobile] = useState("");
-  const [reviewError, setReviewError] = useState("");
-  const [coverIdx, setCoverIdx] = useState(0);
-  const inputRefs = useRef([]);
+
   const [formData, setFormData] = useState({
+    name:"",
+    logo:null,
+    mobile:"",
     category: "For Sale: Houses & Apartments",
     propertyType: "",
     bhk: "",
@@ -43,38 +38,29 @@ const [name, setName] = useState("");
     state: "",
   });
 
-  // const handleImageUpload = (e, idx) => {
-  //   const file = e.target.files[0];
-  //   if (file) {
-  //     const newPhotos = [...formData.photos];
-  //     newPhotos[idx] = file;
-  //     setFormData(prev => ({
-  //       ...prev,
-  //       photos: newPhotos,
-  //       coverIdx: newPhotos.every(p => !p) ? idx : prev.coverIdx
-  //     }));
-  //   }
-  // };
-
-  //  const handleRemoveImage = (idx) => {
-  //   const newPhotos = [...formData.photos];
-  //   newPhotos[idx] = null;
-  //   setFormData(prev => ({
-  //     ...prev,
-  //     photos: newPhotos,
-  //     coverIdx: idx === prev.coverIdx ? 
-  //       newPhotos.findIndex(p => p) : prev.coverIdx
-  //   }));
-  // };
+  const [photos, setPhotos] = useState(Array(20).fill(null));
+  const [coverIdx, setCoverIdx] = useState(0);
+  const [selectedState, setSelectedState] = useState("");
+  const [selectedDistrict, setSelectedDistrict] = useState("");
+const [errors, setErrors] = useState({});
+const [logo, setLogo] = useState(null);
+const inputRefs = useRef([]);
 
 
-//   const handleBoxClick = (idx) => {
-//   setCoverIdx(idx);
-//   if (inputRefs.current[idx]) {
-//     inputRefs.current[idx].click();
-//   }
-// };
-
+const validateForm = () => {
+  const newErrors = {};
+  if (!formData.name.trim()) newErrors.name = "Name is required";
+  if (!formData.mobile.match(/^[6-9]\d{9}$/)) newErrors.mobile = "Valid 10-digit mobile number required";
+  if (!photos.some(p => p)) newErrors.photos = "At least one property photo required";
+  if (!formData.propertyType) newErrors.propertyType = "Property type is required";
+  if (!formData.superBuiltupArea) newErrors.superBuiltupArea = "Super builtup area is required";
+  if (!formData.carpetArea) newErrors.carpetArea = "Carpet area is required";
+  if (!formData.price) newErrors.price = "Price is required";
+  if (!selectedState) newErrors.state = "State is required";
+  if (!selectedDistrict) newErrors.district = "District is required";
+  setErrors(newErrors);
+  return Object.keys(newErrors).length === 0;
+};
 
 
   const handleStateChange = (e) => {
@@ -91,7 +77,6 @@ const [name, setName] = useState("");
       setLogo(file);
     }
   };
-  const [errors, setErrors] = useState({});
 
  const logoInputRef = useRef(null);
 const handleSingleImageUpload = (e) => {
@@ -125,19 +110,6 @@ const handleSingleImageUpload = (e) => {
   };
 
 
-//     const handleCoverClick = (idx) => {
-//     if (inputRefs.current[idx]) {
-//       inputRefs.current[idx].click();
-//     }
-//   };
-
-//   const handleCoverBadgeClick = (idx) => {
-//   setCoverIdx(idx);
-//   if (inputRefs.current[idx]) {
-//     inputRefs.current[idx].click();
-//   }
-// };
-
    const handleSetCover = (idx) => {
     setCoverIdx(idx);
   };
@@ -147,40 +119,9 @@ const handleSingleImageUpload = (e) => {
     if (errors[field]) setErrors(prev => ({ ...prev, [field]: "" }));
   };
 
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    
-    if (!name.trim()) {
-      setReviewError("Name is required");
-      return;
-    }
-    if (!mobile.match(/^[6-9]\d{9}$/)) {
-      setReviewError("Valid 10-digit mobile number required");
-      return;
-    }
-    
-    if (!photos.some(p => p)) {
-      setFormError("At least one property photo required");
-      return;
-    }
-
-     const validateForm = () => {
-    const newErrors = {};
-    
-    if (!formData.name.trim()) newErrors.name = "Name is required";
-    if (!formData.mobile.match(/^[6-9]\d{9}$/)) {
-      newErrors.mobile = "Valid 10-digit mobile number required";
-    }
-    
-    if (!formData.photos.some(p => p)) {
-      newErrors.photos = "At least one property photo required";
-    }
-    
-    const handleSubmit = (e) => {
+const handleSubmit = (e) => {
     e.preventDefault();
     if (!validateForm()) return;
-
     const submissionData = {
       userDetails: {
         name: formData.name,
@@ -188,32 +129,13 @@ const handleSingleImageUpload = (e) => {
         mobile: `+91${formData.mobile}`
       },
       propertyDetails: { ...formData },
-      photos: formData.photos.filter(p => p)
-    };
-
-    console.log("Submission Data:", submissionData);
-    alert("Form submitted successfully!");
-  };
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-    const submissionData = {
-      userDetails: {
-        name,
-        logo,
-        mobile: `+91${mobile}`
-      },
-      propertyDetails: formData,
-      photos,
+      photos: photos.filter(p => p),
       location: {
         state: selectedState,
         district: selectedDistrict
       }
     };
-
-    console.log("Combined Submission Data:", submissionData);
+    console.log("Submission Data:", submissionData);
     alert("Form submitted successfully!");
   };
 
