@@ -839,7 +839,7 @@ const handleSingleImageUpload = (e) => {
 
 
           <button
-            type="button"
+            type="submit"
             className=" py-3 px-4 bg-gray-300 text-white font-medium rounded hover:bg-gray-500 transition"
           >
             Post Now
